@@ -94,6 +94,7 @@ public class Frame extends JFrame {
    public void checkTileCkicked() {
       if (note.get(0).getY() + playground.tileHeight >= playground.height - 2 * playground.tileHeight && key == 'a') {
          note.remove(0);
+         key = ' ';
       }
    }
 
