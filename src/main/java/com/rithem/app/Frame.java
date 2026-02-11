@@ -27,6 +27,8 @@ public class Frame extends JFrame {
    ArrayList<Note> note = new ArrayList<>(Arrays.asList(arr));
    private char key;
 
+   private MusicPlayer musicPlayer = new MusicPlayer();
+
    public Frame() {
       playground.addKeyListener(new KeyAdapter() {
          @Override
@@ -57,17 +59,11 @@ public class Frame extends JFrame {
       Timer timer = new Timer(delay, new ActionListener() {
          @Override
          public void actionPerformed(ActionEvent e) {
-            if (note.isEmpty()) {
-               return;
-            }
-
-            checkLose();
 
             if (!running) {
                ((Timer) e.getSource()).stop();
             }
 
-            checkTileCkicked();
             update();
             playground.repaint();
          }
@@ -77,6 +73,7 @@ public class Frame extends JFrame {
 
    public void startGame() {
       running = true;
+      musicPlayer.playMusic();
       gameLoop();
    }
 
@@ -84,16 +81,28 @@ public class Frame extends JFrame {
       running = false;
    }
 
+   int tmp = 100000;
    public void update() {
+      // System.out.println(musicPlayer.clip.getFramePosition());
+      if(musicPlayer.clip.getFramePosition() > tmp){
+         tmp = musicPlayer.clip.getFramePosition() + 180000;
+         note.add(new Note(3, 0));
+      }
       playground.setNote(note);
+      if (note.isEmpty()) {
+         return;
+      }
       for (int i = 0; i < note.size(); i++) {
          note.get(i).setY(note.get(i).getY() + note.get(i).getSpeed());
       }
+      checkLose();
+      checkTileCkicked();
    }
 
    public void checkTileCkicked() {
-      if (note.get(0).getY() + playground.tileHeight >= playground.height - 2 * playground.tileHeight && key == 'a') {
+      if (note.get(0).getY() + note.get(0).getHeight() >= playground.clickbleRowStart && key == 'a') {
          note.remove(0);
+         // musicPlayer.clip.setFramePosition(0);
          key = ' ';
       }
    }

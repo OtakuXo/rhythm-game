@@ -9,6 +9,7 @@ public class Note {
    private int x = 0;
    private int y = 0;
    private int speed = 2;
+   private boolean clickble = false;
 
    Note(int x, int y) {
       this.x = x;
@@ -43,9 +44,16 @@ public class Note {
       return speed;
    }
 
-   public void setSpeed(int speed){
+   public void setSpeed(int speed) {
       this.speed = speed;
    }
 
+   public boolean isClickble() {
+      return clickble;
+   }
+
+   public void setClickble(boolean clickble) {
+      this.clickble = clickble;
+   }
 
 }
