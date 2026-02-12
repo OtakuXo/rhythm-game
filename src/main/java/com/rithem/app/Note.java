@@ -8,8 +8,10 @@ public class Note {
    private final int height = 80;
    private int x = 0;
    private int y = 0;
-   private int speed = 2;
+   private int score = 5;
    private boolean clickble = false;
+   private boolean missed = false;
+
 
    Note(int x, int y) {
       this.x = x;
@@ -40,12 +42,12 @@ public class Note {
       this.y = y;
    }
 
-   public int getSpeed() {
-      return speed;
+   public int getScore() {
+      return score;
    }
 
-   public void setSpeed(int speed) {
-      this.speed = speed;
+   public void setScore(int speed) {
+      this.score = speed;
    }
 
    public boolean isClickble() {
@@ -54,6 +56,14 @@ public class Note {
 
    public void setClickble(boolean clickble) {
       this.clickble = clickble;
+   }
+
+   public boolean isMissed() {
+	return missed;
+}
+
+   public void setMissed(boolean missed) {
+	this.missed = missed;
    }
 
 }

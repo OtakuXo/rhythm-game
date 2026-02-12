@@ -11,29 +11,35 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.Arrays;
-
-class Students {
-   char name;
-}
 
 public class Frame extends JFrame {
-   private boolean running = false;
-   private Note arr[] = { new Note(1, 0), new Note(2, -80), new Note(1, -160) };
+   public enum State {
+      running, paused, stoped
+   };
 
    private JPanel panel = new JPanel();
    private PlayGround playground = new PlayGround();
 
-   ArrayList<Note> note = new ArrayList<>(Arrays.asList(arr));
-   private char key;
+   private Song song[] = { new Song(1, 1000), new Song(2, 2000), new Song(0, 500), new Song(3, 1000) };
+   private int arrpos = 0;
 
+   private State gameState = State.stoped;
    private MusicPlayer musicPlayer = new MusicPlayer();
+   private long clipTime;
+   private long tmp = 0;
+   private int speed = 5;
+
+   private ArrayList<Note> note = new ArrayList<>();
+   private int key;
+   private int score = 0;
+
+   private Judge judge = new Judge(playground.clickbleRowStart, playground.clickbleRowEnd);
 
    public Frame() {
       playground.addKeyListener(new KeyAdapter() {
          @Override
          public void keyPressed(KeyEvent e) {
-            key = e.getKeyChar();
+            key = e.getKeyCode();
          }
 
          public void keyReleased(KeyEvent e) {
@@ -53,6 +59,7 @@ public class Frame extends JFrame {
       startGame();
    }
 
+   // gameloop dose gameloop thing
    public void gameLoop() {
       int delay = 16;
 
@@ -60,7 +67,7 @@ public class Frame extends JFrame {
          @Override
          public void actionPerformed(ActionEvent e) {
 
-            if (!running) {
+            if (gameState == State.stoped || gameState == State.paused) {
                ((Timer) e.getSource()).stop();
             }
 
@@ -71,45 +78,122 @@ public class Frame extends JFrame {
       timer.start();
    }
 
-   public void startGame() {
-      running = true;
-      musicPlayer.playMusic();
-      gameLoop();
-   }
-
-   public void stopGame() {
-      running = false;
-   }
-
-   int tmp = 100000;
+   // main logic
    public void update() {
-      // System.out.println(musicPlayer.clip.getFramePosition());
-      if(musicPlayer.clip.getFramePosition() > tmp){
-         tmp = musicPlayer.clip.getFramePosition() + 180000;
-         note.add(new Note(3, 0));
+
+      System.out.println(score);
+
+      // adds notes to note
+      if (musicPlayer.clip.getMicrosecondPosition() > tmp) {
+         tmp = musicPlayer.clip.getMicrosecondPosition() + song[arrpos].beatLengthMs * 1000;
+         note.add(new Note(song[arrpos].position, 0));
+
+         // temperory
+         if (song.length == arrpos + 1) {
+            arrpos = 0;
+            return;
+         } else {
+            arrpos++;
+         }
       }
+
       playground.setNote(note);
       if (note.isEmpty()) {
          return;
       }
+
       for (int i = 0; i < note.size(); i++) {
-         note.get(i).setY(note.get(i).getY() + note.get(i).getSpeed());
+         note.get(i).setY(note.get(i).getY() + this.speed);
       }
-      checkLose();
-      checkTileCkicked();
+
+      judge.checkNote(note.get(0), key);
+      if (note.get(0).isClickble()) {
+         checkTileCkicked();
+      }
    }
 
+   public void startGame() {
+      musicPlayer.playMusic();
+      musicPlayer.clip.start();
+      gameState = State.running;
+      gameLoop();
+   }
+
+   public void stopGame() {
+      musicPlayer.clip.stop();
+      gameState = State.stoped;
+   }
+
+   // not implemented
+   public void pauseGame() {
+      clipTime = musicPlayer.clip.getMicrosecondPosition() / 1000;
+      musicPlayer.clip.stop();
+      gameState = State.paused;
+   }
+
+   // not implemented
+   public void unpauseGame() {
+      musicPlayer.clip.start();
+      musicPlayer.clip.setMicrosecondPosition(clipTime);
+      gameState = State.running;
+   }
+
+   // this needs to be optimized in another class
    public void checkTileCkicked() {
-      if (note.get(0).getY() + note.get(0).getHeight() >= playground.clickbleRowStart && key == 'a') {
+
+      if (note.get(0).isMissed()) {
          note.remove(0);
-         // musicPlayer.clip.setFramePosition(0);
-         key = ' ';
       }
+
+      switch (key) {
+         // left
+         case 65: // a
+         case 37: // arrow left
+         case 72: // h
+            if (note.get(0).getX() == 0) {
+               score = score + note.get(0).getScore();
+               key = ' ';
+               note.remove(0);
+            }
+            break;
+         // down
+         case 83:// s
+         case 40:// arrow down
+         case 74:// j
+            if (note.get(0).getX() == 1) {
+               score = score + note.get(0).getScore();
+               key = ' ';
+               note.remove(0);
+            }
+            break;
+         // up
+         case 87:// w
+         case 38:// arrow up
+         case 75:// k
+            if (note.get(0).getX() == 2) {
+               score = score + note.get(0).getScore();
+               key = ' ';
+               note.remove(0);
+            }
+            break;
+         // right
+         case 68:// d
+         case 39:// arrow right
+         case 76:// l
+            if (note.get(0).getX() == 3) {
+               score = score + note.get(0).getScore();
+               key = ' ';
+               note.remove(0);
+            }
+            break;
+      }
+
    }
 
-   public void checkLose() {
-      if (note.get(0).getY() >= playground.height - playground.tileHeight) {
-         stopGame();
-      }
-   }
+   // this needs to rework aswell
+   // public void checkLose() {
+   // if (note.get(0).getY() >= playground.height - playground.tileHeight) {
+   // // stopGame();
+   // }
+   // }
 }

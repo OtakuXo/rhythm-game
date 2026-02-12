@@ -17,12 +17,7 @@ public class MusicPlayer {
 
          Clip clip = AudioSystem.getClip();
          clip.open(audioStream);
-
-         System.out.println(clip);
          this.clip = clip;
-
-         clip.start();
-         clip.getFramePosition();
 
          Thread.sleep(1000);
       } catch (Exception e) {

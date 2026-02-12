@@ -20,11 +20,8 @@ public class PlayGround extends JPanel{
    final Dimension playgroundSize = new Dimension(width, height);
 
    final int clickbleRow = 9;
-   final int clickbleRowStart = tileHeight * clickbleRow - 1;
+   final int clickbleRowStart = tileHeight * (clickbleRow - 1);
    final int clickbleRowEnd = tileHeight * clickbleRow;
-
-
-   final 
 
    // private Note note[] = { new Note(1, 0), new Note(2, -80), new Note(1, -160) };
    private ArrayList<Note> note = new ArrayList<>();
