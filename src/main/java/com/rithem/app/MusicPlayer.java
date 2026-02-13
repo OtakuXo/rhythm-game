@@ -17,6 +17,7 @@ public class MusicPlayer {
 
          Clip clip = AudioSystem.getClip();
          clip.open(audioStream);
+         clip.start();
          this.clip = clip;
 
          Thread.sleep(1000);
