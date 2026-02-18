@@ -4,15 +4,20 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-public class PlayGround extends JPanel{
+public class PlayGround extends JPanel {
 
-   final int tileWidth = 80;
-   final int tileHeight = 80;
+   final int tileWidth = 90;
+   final int tileHeight = 90;
    final int rows = 10;
    final int cols = 4;
    final int width = tileWidth * cols;
@@ -22,8 +27,11 @@ public class PlayGround extends JPanel{
    final int clickbleRow = 9;
    final int clickbleRowStart = tileHeight * (clickbleRow - 1);
    final int clickbleRowEnd = tileHeight * clickbleRow;
+   private Image arrowRight;
+   private Image arrowLeft;
+   private Image arrowUp;
+   private Image arrowDown;
 
-   // private Note note[] = { new Note(1, 0), new Note(2, -80), new Note(1, -160) };
    private ArrayList<Note> note = new ArrayList<>();
 
    public PlayGround() {
@@ -31,12 +39,21 @@ public class PlayGround extends JPanel{
       this.setMinimumSize(playgroundSize);
       this.setMaximumSize(playgroundSize);
       this.setFocusable(true);
+      this.requestFocusInWindow(true);
+
+      try {
+         arrowRight = ImageIO.read(getClass().getResourceAsStream("/images/arrowRight.png"));
+         arrowLeft = ImageIO.read(getClass().getResourceAsStream("/images/arrowLeft.png"));
+         arrowUp = ImageIO.read(getClass().getResourceAsStream("/images/arrowUp.png"));
+         arrowDown = ImageIO.read(getClass().getResourceAsStream("/images/arrowDown.png"));
+      } catch (Exception e) {
+         System.out.println("hello");
+      }
    }
 
    @Override
    protected void paintComponent(Graphics g) {
       super.paintComponents(g);
-
       Graphics2D g2D = (Graphics2D) g;
 
       g2D.setBackground(Color.decode("#000"));
@@ -50,16 +67,32 @@ public class PlayGround extends JPanel{
       g2D.drawLine(0, height - 2 * tileHeight, width, height - 2 * tileHeight);
 
       for (int i = 0; i < note.size(); i++) {
-         g2D.setColor(Color.red);
-         g2D.fillRect((note.get(i).getX() * tileWidth) + 2, note.get(i).getY(), note.get(i).getWidth(), note.get(i).getHeight());
+         // g2D.setColor(Color.red);
+         // g2D.fillRect((note.get(i).getX() * tileWidth) + 2, note.get(i).getY(),
+         // note.get(i).getWidth(),
+         // note.get(i).getHeight());
+         switch (note.get(i).getX()) {
+            case 0:
+               g2D.drawImage(arrowRight, note.get(i).getX() * tileWidth, note.get(i).getY(), null);
+               break;
+            case 1:
+               g2D.drawImage(arrowDown, (note.get(i).getX() * tileWidth) + 5, note.get(i).getY(), null);
+               break;
+            case 2:
+               g2D.drawImage(arrowUp, (note.get(i).getX() * tileWidth) + 5, note.get(i).getY(), null);
+               break;
+            case 3:
+               g2D.drawImage(arrowLeft, note.get(i).getX() * tileWidth, note.get(i).getY(), null);
+               break;
+         }
       }
    }
-   
-   public List<Note> getNote(){
+
+   public List<Note> getNote() {
       return this.note;
    }
 
-   public void setNote(List<Note> note){
+   public void setNote(List<Note> note) {
       this.note.clear();
       this.note.addAll(note);
    }

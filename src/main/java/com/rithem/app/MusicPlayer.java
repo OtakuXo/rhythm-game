@@ -7,7 +7,15 @@ import javax.sound.sampled.*;
 
 public class MusicPlayer {
 
-   Clip clip;
+   private Clip clip;
+
+   public Clip getClip() {
+	return clip;
+}
+
+   public void setClip(Clip clip) {
+	this.clip = clip;
+   }
 
    public void playMusic() {
       try {
@@ -17,7 +25,6 @@ public class MusicPlayer {
 
          Clip clip = AudioSystem.getClip();
          clip.open(audioStream);
-         clip.start();
          this.clip = clip;
 
          Thread.sleep(1000);

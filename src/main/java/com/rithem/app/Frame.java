@@ -1,78 +1,60 @@
 package com.rithem.app;
 
-// import java.awt.*;
-
 import javax.swing.*;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Font;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import com.rithem.app.pages.Game;
+import com.rithem.app.pages.Home;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Frame extends JFrame {
-   private JPanel panel = new JPanel();
-   private PlayGround playground = new PlayGround();
-   private JLabel scoreBoard = new JLabel(); 
-
-   private MusicPlayer musicPlayer = new MusicPlayer();
-   private long clipTime;
-   private GameLoop gameLoop = new GameLoop(playground, musicPlayer);
-   int score = 0;
+   private Game game = new Game();
+   private Home home = new Home();
+   private String activePanel = "home";
 
    public Frame() {
 
-      playground.addKeyListener(new KeyAdapter() {
-         @Override
-         public void keyPressed(KeyEvent e) {
-            gameLoop.setKey(e.getKeyCode());
-         }
-
-         public void keyReleased(KeyEvent e) {
-            gameLoop.setKey(0);
-         }
-      });
-
-
-      scoreBoard.setAlignmentX(Component.CENTER_ALIGNMENT);
-      scoreBoard.setForeground(Color.green);
-      scoreBoard.setFont(new Font("Serif", Font.PLAIN, 20));
-      scoreBoard.setText("score: "+score);
-
-      panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-      panel.setBackground(Color.black);
-      panel.add(scoreBoard);
-      panel.add(playground);
-
-
-      this.add(panel);
+      this.swapPanel();
       this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       this.pack();
       this.setLocationRelativeTo(null);
       this.setVisible(true);
 
-      startGame();
+      home.start.addActionListener(new ActionListener() {
+         public void actionPerformed(ActionEvent e) {
+            activePanel = "game";
+            swapPanel();
+            game.requestFocusInWindow(); 
+            startGame();
+         }
+      });
+
    }
 
-
+   public void swapPanel() {
+      if (activePanel == "game") {
+         this.remove(home);
+         this.add(game);
+         revalidate();
+         repaint();
+      } else {
+         this.remove(game);
+         this.add(home);
+      }
+   }
 
    public void startGame() {
-      gameLoop.loop(scoreBoard);
+      game.gameLoop.loop(game.scoreBoard);
+      game.musicPlayer.getClip().start();
    }
 
-   public void stopGame() {
-      musicPlayer.clip.stop();
+
+   public void setActivePanel(String activePanel) {
+      this.activePanel = activePanel;
    }
 
-   // not implemented
-   public void pauseGame() {
-      clipTime = musicPlayer.clip.getMicrosecondPosition() / 1000;
-      musicPlayer.clip.stop();
-   }
-
-   // not implemented
-   public void unpauseGame() {
-      musicPlayer.clip.start();
-      musicPlayer.clip.setMicrosecondPosition(clipTime);
+   public String getActivePanel() {
+      return activePanel;
    }
 }
