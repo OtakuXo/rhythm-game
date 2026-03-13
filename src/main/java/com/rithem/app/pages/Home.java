@@ -11,16 +11,20 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import com.rithem.app.Frame;
+
 /**
  * Home
  */
 public class Home extends JPanel {
-   public Dimension size = new Dimension(1000,1000);
-   public JButton start = new JButton("start");
-   public JButton exit = new JButton("exit");
+   private Frame frame;
+   private Dimension size = new Dimension(1000,1000);
+   private JButton start = new JButton("start");
+   private JButton exit = new JButton("exit");
 
 
-   public Home() {
+   public Home(Frame frame) {
+      this.frame = frame;
       this.setBackground(Color.BLACK);
       this.setLayout(new GridBagLayout());
       this.setPreferredSize(size);
@@ -40,6 +44,15 @@ public class Home extends JPanel {
          @Override
          public void actionPerformed(ActionEvent e){
             System.exit(0);
+         }
+      });
+
+      start.addActionListener(new ActionListener() {
+         public void actionPerformed(ActionEvent e){
+
+            frame.setActivePanel("stage");
+            frame.swapPanel();
+
          }
       });
 

@@ -4,13 +4,13 @@ import com.rithem.app.musics.Music;
 import com.rithem.app.musics.NotePosition;
 
 /**
- * Monogatari
+ * LukaLuka
  */
+public class LukaLuka {
 
-public class Monogatari {
-   public NotePosition track[] = { new NotePosition(2, 200), new NotePosition(0, 200),
-         new NotePosition(0, 200), new NotePosition(0, 200), new NotePosition(0, 200), new NotePosition(2, 200),
-         new NotePosition(3, 200), new NotePosition(2, 200), new NotePosition(2, 200), new NotePosition(0, 200),
+   public NotePosition track[] = { new NotePosition(0, 200), new NotePosition(0, 200),
+         new NotePosition(0, 200), new NotePosition(0, 200), new NotePosition(0, 200), new NotePosition(0, 200),
+         new NotePosition(0, 200), new NotePosition(0, 200), new NotePosition(0, 200), new NotePosition(0, 200),
          new NotePosition(3, 200), new NotePosition(2, 200), new NotePosition(0, 200), new NotePosition(1, 200),
          new NotePosition(3, 200), new NotePosition(3, 200), new NotePosition(1, 200), new NotePosition(3, 200),
          new NotePosition(0, 200), new NotePosition(0, 200), new NotePosition(0, 200), new NotePosition(1, 200),
@@ -58,5 +58,5 @@ public class Monogatari {
          new NotePosition(2, 200), new NotePosition(0, 200), new NotePosition(2, 200), new NotePosition(0, 200),
          new NotePosition(0, 200) };
 
-   public Music music = new Music("monogatari",91508004 / 1000, 2900, track);
+   public Music music = new Music("LukaLuka", 91508004 / 1000, 2900, track);
 }

@@ -22,17 +22,19 @@ import java.awt.event.KeyEvent;
  * Game
  */
 public class Game extends JPanel {
-   private MusicList musicList = new MusicList();
-   private Music music = musicList.monogatari.music;
+   // private MusicList musicList = new MusicList();
+   private Music music;
 
    private PlayGround playground = new PlayGround();
    public JLabel scoreBoard = new JLabel();
    public MusicPlayer musicPlayer = new MusicPlayer();
-   public GameLoop gameLoop = new GameLoop(playground, musicPlayer, music);
+   public GameLoop gameLoop;
    public long clipTime;
    public Frame parentFrame;
 
-   public Game(Frame frame) {
+   public Game(Frame frame, Music music) {
+      this.music = music;
+      this.gameLoop = new GameLoop(playground, musicPlayer, music);
       this.parentFrame = frame;
 
       this.addKeyListener(new KeyAdapter() {
@@ -65,6 +67,7 @@ public class Game extends JPanel {
       gameLoop.loop(scoreBoard, this.parentFrame);
       musicPlayer.getClip().start();
    }
+
    public void stopGame() {
       this.musicPlayer.getClip().stop();
    }

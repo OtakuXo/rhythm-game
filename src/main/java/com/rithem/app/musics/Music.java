@@ -4,10 +4,12 @@ public class Music {
    public long musicLength;
    public int firstNoteSpawnTime;
    public NotePosition track[];
+   public String name;
 
    private int tmp;
 
-   public Music(long songLength, int firstNoteSpawnTime, NotePosition track[]) {
+   public Music(String name, long songLength, int firstNoteSpawnTime, NotePosition track[]) {
+      this.name = name;
       this.musicLength = songLength;
       this.firstNoteSpawnTime = firstNoteSpawnTime;
       this.track = track;
