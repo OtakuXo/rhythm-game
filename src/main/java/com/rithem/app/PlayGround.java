@@ -73,7 +73,7 @@ public class PlayGround extends JPanel {
          // note.get(i).getHeight());
          switch (note.get(i).getX()) {
             case 0:
-               g2D.drawImage(arrowRight, note.get(i).getX() * tileWidth, note.get(i).getY(), null);
+               g2D.drawImage(arrowLeft, note.get(i).getX() * tileWidth, note.get(i).getY(), null);
                break;
             case 1:
                g2D.drawImage(arrowDown, (note.get(i).getX() * tileWidth) + 5, note.get(i).getY(), null);
@@ -82,7 +82,7 @@ public class PlayGround extends JPanel {
                g2D.drawImage(arrowUp, (note.get(i).getX() * tileWidth) + 5, note.get(i).getY(), null);
                break;
             case 3:
-               g2D.drawImage(arrowLeft, note.get(i).getX() * tileWidth, note.get(i).getY(), null);
+               g2D.drawImage(arrowRight, note.get(i).getX() * tileWidth, note.get(i).getY(), null);
                break;
          }
       }

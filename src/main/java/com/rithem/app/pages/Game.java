@@ -4,9 +4,13 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.rithem.app.Frame;
 import com.rithem.app.GameLoop;
 import com.rithem.app.MusicPlayer;
 import com.rithem.app.PlayGround;
+import com.rithem.app.GameLoop.State;
+import com.rithem.app.musics.Music;
+import com.rithem.app.musics.MusicList;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -18,18 +22,22 @@ import java.awt.event.KeyEvent;
  * Game
  */
 public class Game extends JPanel {
+   private MusicList musicList = new MusicList();
+   private Music music = musicList.monogatari.music;
+
    private PlayGround playground = new PlayGround();
-
    public JLabel scoreBoard = new JLabel();
-   public long clipTime;
    public MusicPlayer musicPlayer = new MusicPlayer();
-   public GameLoop gameLoop = new GameLoop(playground, musicPlayer );
+   public GameLoop gameLoop = new GameLoop(playground, musicPlayer, music);
+   public long clipTime;
+   public Frame parentFrame;
 
-   public Game() {
+   public Game(Frame frame) {
+      this.parentFrame = frame;
+
       this.addKeyListener(new KeyAdapter() {
          @Override
          public void keyPressed(KeyEvent e) {
-            System.out.println(e.getKeyCode());
             gameLoop.setKey(e.getKeyCode());
          }
 
@@ -51,6 +59,12 @@ public class Game extends JPanel {
 
    }
 
+   public void startGame() {
+      music.checkTrack();
+      gameLoop.gameState = State.running;
+      gameLoop.loop(scoreBoard, this.parentFrame);
+      musicPlayer.getClip().start();
+   }
    public void stopGame() {
       this.musicPlayer.getClip().stop();
    }

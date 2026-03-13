@@ -3,6 +3,9 @@ package com.rithem.app;
 
 import javax.swing.JLabel;
 import javax.swing.Timer;
+
+import com.rithem.app.musics.Music;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -12,47 +15,48 @@ public class GameLoop {
       running, paused, stoped
    };
 
-   private Song song = new Songs().monogatariOp4;
+   private Music music;
 
    private ArrayList<Note> note = new ArrayList<>();
    private int trackPosition = 0;
+   private long clipTimeMs = 0;
+   private int score = 0;
+   private int speed = 10;
+   // temperory public
+   public State gameState = State.stoped;
 
    private MusicPlayer musicPlayer;
-   private long clipTimeMs;
-   private State gameState = State.stoped;
-   // private int bpm = 120;
-   // private int beatLength = 60/bpm;
-   private int speed = 10;
-   private long nestNoteSpawnTime;
-   // private double timeTaken;
-   private int score = 0;
-
+   private long nextNoteSpawnTime;
    private PlayGround playGround;
    private Note activeNote;
    private Judge judge;
    private int key;
 
-   public GameLoop(PlayGround playGround, MusicPlayer musicPlayer) {
+   public GameLoop(PlayGround playGround, MusicPlayer musicPlayer, Music music) {
       this.playGround = playGround;
       this.judge = new Judge(playGround.clickbleRowStart, playGround.clickbleRowEnd);
-      this.nestNoteSpawnTime = song.firstNoteSpawnTime;
+      this.nextNoteSpawnTime = music.firstNoteSpawnTime;
+      this.music = music;
       this.musicPlayer = musicPlayer;
-      this.gameState = State.running;
+      // this.gameState = State.running;
       musicPlayer.playMusic();
    }
 
-   public void loop(JLabel scoreBoard) {
+   public void loop(JLabel scoreBoard, Frame frame) {
       int delay = 16;
 
       Timer timer = new Timer(delay, new ActionListener() {
          @Override
          public void actionPerformed(ActionEvent e) {
-            if(musicPlayer.getClip().getFrameLength() == musicPlayer.getClip().getFramePosition()){
 
+            if (musicPlayer.getClip().getFrameLength() == musicPlayer.getClip().getFramePosition()) {
+               resetGame(e, frame);
             }
 
             if (gameState == State.stoped || gameState == State.paused) {
-               ((Timer) e.getSource()).stop();
+               // ((Timer) e.getSource()).stop();
+               musicPlayer.getClip().stop();
+               checkKeyEvents();
                return;
             }
 
@@ -67,19 +71,13 @@ public class GameLoop {
    public void update(JLabel scoreBoard) {
 
       scoreBoard.setText("score: " + this.score);
-
       // adds note
       clipTimeMs = musicPlayer.getClip().getMicrosecondPosition() / 1000;
-      if (clipTimeMs > nestNoteSpawnTime) {
-         note.add(new Note(song.track[trackPosition].position, 0));
-         nestNoteSpawnTime = clipTimeMs + song.track[trackPosition].beatLengthMs;
+      if (clipTimeMs > nextNoteSpawnTime && music.track.length != trackPosition) {
+         note.add(new Note(music.track[trackPosition].position, 0));
+         nextNoteSpawnTime = clipTimeMs + music.track[trackPosition].beatLengthMs;
 
-         // temporary
-         if (song.track.length == trackPosition + 1) {
-            trackPosition = 0;
-         } else {
-            trackPosition++;
-         }
+         trackPosition++;
       }
 
       for (int i = 0; i < note.size(); i++) {
@@ -90,27 +88,37 @@ public class GameLoop {
       if (!note.isEmpty()) {
          activeNote = note.get(0);
          judge.checkNote(activeNote, key);
-
          if (activeNote.isClickble()) {
-            checkTileCkicked();
+            if (activeNote.isMissed()) {
+               note.remove(0);
+            }
+            checkKeyEvents();
             playGround.repaint();
          }
       }
 
    }
 
-   public void checkTileCkicked() {
-      if (activeNote.isMissed()) {
-         note.remove(0);
-      }
+   public void resetGame(ActionEvent e, Frame frame) {
+      note.clear();
+      clipTimeMs = 0;
+      trackPosition = 0;
+      score = 0;
+      nextNoteSpawnTime = music.firstNoteSpawnTime;
+      musicPlayer.getClip().setMicrosecondPosition(0);
+      // ((Timer) e.getSource()).stop();
+      frame.setActivePanel("home");
+      frame.swapPanel();
+   }
 
+   public void checkKeyEvents() {
       switch (key) {
          // left
          case 65: // a
          case 37: // arrow left
          case 72: // h
-            if (activeNote.getX() == 0) {
-               key = ' ';
+            if (activeNote.getX() == 0 && gameState == State.running) {
+               key = 0;
                score = score + activeNote.getScore();
                note.remove(0);
             }
@@ -119,8 +127,8 @@ public class GameLoop {
          case 83:// s
          case 40:// arrow down
          case 74:// j
-            if (activeNote.getX() == 1) {
-               key = ' ';
+            if (activeNote.getX() == 1 && gameState == State.running) {
+               key = 0;
                score = score + activeNote.getScore();
                note.remove(0);
             }
@@ -129,8 +137,8 @@ public class GameLoop {
          case 87:// w
          case 38:// arrow up
          case 75:// k
-            if (activeNote.getX() == 2) {
-               key = ' ';
+            if (activeNote.getX() == 2 && gameState == State.running) {
+               key = 0;
                score = score + activeNote.getScore();
                note.remove(0);
             }
@@ -139,13 +147,27 @@ public class GameLoop {
          case 68:// d
          case 39:// arrow right
          case 76:// l
-            if (activeNote.getX() == 3) {
-               key = ' ';
+            if (activeNote.getX() == 3 && gameState == State.running) {
+               key = 0;
                score = score + activeNote.getScore();
                note.remove(0);
             }
             break;
+         case 32: // space
+            if (this.gameState == State.running) {
+               key = 0;
+               System.out.println(key);
+               this.gameState = State.paused;
+               return;
+            } else {
+               key = 0;
+               System.out.println(key);
+               this.gameState = State.running;
+               musicPlayer.getClip().start();
+               return;
+            }
       }
+
    }
 
    public int getKey() {

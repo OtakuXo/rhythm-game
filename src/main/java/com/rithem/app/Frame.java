@@ -9,7 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Frame extends JFrame {
-   private Game game = new Game();
+   private Game game = new Game(this);
    private Home home = new Home();
    private String activePanel = "home";
 
@@ -25,8 +25,8 @@ public class Frame extends JFrame {
          public void actionPerformed(ActionEvent e) {
             activePanel = "game";
             swapPanel();
-            game.requestFocusInWindow(); 
-            startGame();
+            game.requestFocusInWindow();
+            game.startGame();
          }
       });
 
@@ -39,16 +39,13 @@ public class Frame extends JFrame {
          revalidate();
          repaint();
       } else {
+         game.musicPlayer.getClip().stop();
          this.remove(game);
          this.add(home);
+         revalidate();
+         repaint();
       }
    }
-
-   public void startGame() {
-      game.gameLoop.loop(game.scoreBoard);
-      game.musicPlayer.getClip().start();
-   }
-
 
    public void setActivePanel(String activePanel) {
       this.activePanel = activePanel;
