@@ -5,14 +5,13 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+
+import com.rithem.app.utils.ExpressionIndicator;
 
 public class PlayGround extends JPanel {
 
@@ -32,7 +31,12 @@ public class PlayGround extends JPanel {
    private Image arrowUp;
    private Image arrowDown;
 
+   private Image missed;
+   private Image mah;
+   private Image cool;
+
    private ArrayList<Note> note = new ArrayList<>();
+   private ArrayList<ExpressionIndicator> expressions = new ArrayList<>();
 
    public PlayGround() {
       this.setPreferredSize(playgroundSize);
@@ -44,8 +48,11 @@ public class PlayGround extends JPanel {
       try {
          arrowRight = ImageIO.read(getClass().getResourceAsStream("/images/arrowRight.png"));
          arrowLeft = ImageIO.read(getClass().getResourceAsStream("/images/arrowLeft.png"));
-         arrowUp = ImageIO.read(getClass().getResourceAsStream("/images/arrowUp.png"));
          arrowDown = ImageIO.read(getClass().getResourceAsStream("/images/arrowDown.png"));
+         arrowUp = ImageIO.read(getClass().getResourceAsStream("/images/arrowUp.png"));
+         missed = ImageIO.read(getClass().getResourceAsStream("/images/missed.png"));
+         mah = ImageIO.read(getClass().getResourceAsStream("/images/mah.png"));
+         cool = ImageIO.read(getClass().getResourceAsStream("/images/cool.png"));
       } catch (Exception e) {
          System.out.println("hello");
       }
@@ -67,10 +74,6 @@ public class PlayGround extends JPanel {
       g2D.drawLine(0, height - 2 * tileHeight, width, height - 2 * tileHeight);
 
       for (int i = 0; i < note.size(); i++) {
-         // g2D.setColor(Color.red);
-         // g2D.fillRect((note.get(i).getX() * tileWidth) + 2, note.get(i).getY(),
-         // note.get(i).getWidth(),
-         // note.get(i).getHeight());
          switch (note.get(i).getX()) {
             case 0:
                g2D.drawImage(arrowLeft, note.get(i).getX() * tileWidth, note.get(i).getY(), null);
@@ -85,7 +88,24 @@ public class PlayGround extends JPanel {
                g2D.drawImage(arrowRight, note.get(i).getX() * tileWidth, note.get(i).getY(), null);
                break;
          }
+
       }
+
+      for (int i = 0; i < expressions.size(); i++) {
+         switch (expressions.get(i).getExpression()) {
+            case "missed":
+               g2D.drawImage(missed, expressions.get(i).getX() * tileWidth, expressions.get(i).getY(), null);
+               break;
+            case "mah":
+               g2D.drawImage(mah, expressions.get(i).getX() * tileWidth, expressions.get(i).getY(), null);
+               break;
+            case "cool":
+               g2D.drawImage(cool, expressions.get(i).getX() * tileWidth, expressions.get(i).getY(), null);
+               break;
+         }
+
+      }
+
    }
 
    public List<Note> getNote() {
@@ -95,5 +115,10 @@ public class PlayGround extends JPanel {
    public void setNote(List<Note> note) {
       this.note.clear();
       this.note.addAll(note);
+   }
+
+   public void setExpression(List<ExpressionIndicator> expression) {
+      this.expressions.clear();
+      this.expressions.addAll(expression);
    }
 }

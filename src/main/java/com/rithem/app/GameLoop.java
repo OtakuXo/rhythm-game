@@ -5,6 +5,7 @@ import javax.swing.JLabel;
 import javax.swing.Timer;
 
 import com.rithem.app.musics.Music;
+import com.rithem.app.utils.ExpressionIndicator;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,10 +19,11 @@ public class GameLoop {
    private Music music;
 
    private ArrayList<Note> note = new ArrayList<>();
+   private ArrayList<ExpressionIndicator> expression = new ArrayList<>();
    private int trackPosition = 0;
    private long clipTimeMs = 0;
    private int score = 0;
-   private int speed = 10;
+   private int speed = 7;
    // temperory public
    public State gameState = State.stoped;
 
@@ -39,7 +41,7 @@ public class GameLoop {
       this.music = music;
       this.musicPlayer = musicPlayer;
       // this.gameState = State.running;
-      musicPlayer.playMusic();
+      musicPlayer.playMusic(music.musicPath);
    }
 
    public void loop(JLabel scoreBoard, Frame frame) {
@@ -80,18 +82,30 @@ public class GameLoop {
          trackPosition++;
       }
 
+      //slide note downward
       for (int i = 0; i < note.size(); i++) {
          note.get(i).setY(note.get(i).getY() + this.speed);
       }
+
       playGround.setNote(note);
+      playGround.setExpression(expression);
+
+      if (!expression.isEmpty()) {
+         if (expression.get(0).getStartedAt() + 1000 <= clipTimeMs) {
+         expression.remove(0);
+         }
+      }
 
       if (!note.isEmpty()) {
          activeNote = note.get(0);
          judge.checkNote(activeNote, key);
+
+         if (activeNote.isMissed()) {
+            expression.add(new ExpressionIndicator("missed", clipTimeMs, activeNote.getX(), activeNote.getY()));
+            note.remove(0);
+         }
+
          if (activeNote.isClickble()) {
-            if (activeNote.isMissed()) {
-               note.remove(0);
-            }
             checkKeyEvents();
             playGround.repaint();
          }
@@ -106,11 +120,25 @@ public class GameLoop {
       score = 0;
       nextNoteSpawnTime = music.firstNoteSpawnTime;
       musicPlayer.getClip().setMicrosecondPosition(0);
-      // ((Timer) e.getSource()).stop();
       frame.setActivePanel("home");
       frame.swapPanel();
    }
 
+   public void noteClicked() {
+      key = 0;
+      score = score + activeNote.getScore();
+      note.remove(0);
+      if (activeNote.getScore() == 5) {
+         expression.add(new ExpressionIndicator("mah", clipTimeMs, activeNote.getX(), activeNote.getY()));
+         return;
+      } else {
+         expression.add(new ExpressionIndicator("cool", clipTimeMs, activeNote.getX(), activeNote.getY()));
+         return;
+      }
+
+   }
+
+   // maybe this should be somewhere else
    public void checkKeyEvents() {
       switch (key) {
          // left
@@ -118,9 +146,7 @@ public class GameLoop {
          case 37: // arrow left
          case 72: // h
             if (activeNote.getX() == 0 && gameState == State.running) {
-               key = 0;
-               score = score + activeNote.getScore();
-               note.remove(0);
+               noteClicked();
             }
             break;
          // down
@@ -128,9 +154,7 @@ public class GameLoop {
          case 40:// arrow down
          case 74:// j
             if (activeNote.getX() == 1 && gameState == State.running) {
-               key = 0;
-               score = score + activeNote.getScore();
-               note.remove(0);
+               noteClicked();
             }
             break;
          // up
@@ -138,9 +162,7 @@ public class GameLoop {
          case 38:// arrow up
          case 75:// k
             if (activeNote.getX() == 2 && gameState == State.running) {
-               key = 0;
-               score = score + activeNote.getScore();
-               note.remove(0);
+               noteClicked();
             }
             break;
          // right
@@ -148,9 +170,7 @@ public class GameLoop {
          case 39:// arrow right
          case 76:// l
             if (activeNote.getX() == 3 && gameState == State.running) {
-               key = 0;
-               score = score + activeNote.getScore();
-               note.remove(0);
+               noteClicked();
             }
             break;
          case 32: // space

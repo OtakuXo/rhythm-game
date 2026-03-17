@@ -17,9 +17,9 @@ public class MusicPlayer {
 	this.clip = clip;
    }
 
-   public void playMusic() {
+   public void playMusic(String music) {
       try {
-         InputStream audioFile =  MusicPlayer.class.getClassLoader().getResourceAsStream("audio/mono.wav");
+         InputStream audioFile =  MusicPlayer.class.getClassLoader().getResourceAsStream(music);
          InputStream buffer = new BufferedInputStream(audioFile);
          AudioInputStream audioStream = AudioSystem.getAudioInputStream(buffer);
 

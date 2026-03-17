@@ -58,5 +58,5 @@ public class Monogatari {
          new NotePosition(2, 200), new NotePosition(0, 200), new NotePosition(2, 200), new NotePosition(0, 200),
          new NotePosition(0, 200) };
 
-   public Music music = new Music("monogatari",91508004 / 1000, 2900, track);
+   public Music music = new Music("Monogatari", "audio/mono.wav", 91508004 / 1000, 2900, track);
 }

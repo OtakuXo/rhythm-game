@@ -3,14 +3,9 @@ package com.rithem.app;
 import javax.swing.*;
 
 import com.rithem.app.musics.Music;
-import com.rithem.app.musics.musicfiles.Monogatari;
 import com.rithem.app.pages.Game;
 import com.rithem.app.pages.Home;
 import com.rithem.app.pages.StageSelection;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 
 public class Frame extends JFrame {
    private Home home = new Home(this);
@@ -25,24 +20,6 @@ public class Frame extends JFrame {
       this.pack();
       this.setLocationRelativeTo(null);
       this.setVisible(true);
-
-      // home.start.addActionListener(new ActionListener() {
-      //    public void actionPerformed(ActionEvent e) {
-      //       activePanel = "stage";
-      //       swapPanel();
-      //       game.requestFocusInWindow();
-      //       // game.startGame();
-      //    }
-      // });
-
-      // stage.back.addActionListener(new ActionListener() {
-      //    public void actionPerformed(ActionEvent e) {
-      //       activePanel = "home";
-      //       swapPanel();
-      //       game.requestFocusInWindow();
-      //       // game.startGame();
-      //    }
-      // });
 
    }
 

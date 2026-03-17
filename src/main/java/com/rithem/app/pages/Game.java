@@ -10,7 +10,6 @@ import com.rithem.app.MusicPlayer;
 import com.rithem.app.PlayGround;
 import com.rithem.app.GameLoop.State;
 import com.rithem.app.musics.Music;
-import com.rithem.app.musics.MusicList;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -22,7 +21,6 @@ import java.awt.event.KeyEvent;
  * Game
  */
 public class Game extends JPanel {
-   // private MusicList musicList = new MusicList();
    private Music music;
 
    private PlayGround playground = new PlayGround();
