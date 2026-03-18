@@ -17,28 +17,35 @@ import java.awt.Font;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-/**
- * Game
- */
 public class Game extends JPanel {
    private Music music;
-
    private PlayGround playground = new PlayGround();
+
+   // i need to make them private in future
    public JLabel scoreBoard = new JLabel();
    public MusicPlayer musicPlayer = new MusicPlayer();
    public GameLoop gameLoop;
    public long clipTime;
    public Frame parentFrame;
+   public MusicPlayer clickSound = new MusicPlayer();
 
    public Game(Frame frame, Music music) {
       this.music = music;
       this.gameLoop = new GameLoop(playground, musicPlayer, music);
       this.parentFrame = frame;
+      clickSound.playMusic("audio/click3.wav");
 
       this.addKeyListener(new KeyAdapter() {
          @Override
          public void keyPressed(KeyEvent e) {
+            if (gameLoop.getKey() == e.getKeyCode()) {
+              return; 
+            }
             gameLoop.setKey(e.getKeyCode());
+
+            clickSound.getClip().stop();
+            clickSound.getClip().setFramePosition(0);
+            clickSound.getClip().start();
          }
 
          public void keyReleased(KeyEvent e) {

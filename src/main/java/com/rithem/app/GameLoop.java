@@ -24,7 +24,6 @@ public class GameLoop {
    private long clipTimeMs = 0;
    private int score = 0;
    private int speed = 7;
-   // temperory public
    public State gameState = State.stoped;
 
    private MusicPlayer musicPlayer;
@@ -35,6 +34,7 @@ public class GameLoop {
    private int key;
 
    public GameLoop(PlayGround playGround, MusicPlayer musicPlayer, Music music) {
+
       this.playGround = playGround;
       this.judge = new Judge(playGround.clickbleRowStart, playGround.clickbleRowEnd);
       this.nextNoteSpawnTime = music.firstNoteSpawnTime;
@@ -42,6 +42,7 @@ public class GameLoop {
       this.musicPlayer = musicPlayer;
       // this.gameState = State.running;
       musicPlayer.playMusic(music.musicPath);
+      // musicPlayer.getClip().start();
    }
 
    public void loop(JLabel scoreBoard, Frame frame) {
@@ -82,7 +83,7 @@ public class GameLoop {
          trackPosition++;
       }
 
-      //slide note downward
+      // slide note downward
       for (int i = 0; i < note.size(); i++) {
          note.get(i).setY(note.get(i).getY() + this.speed);
       }
@@ -92,7 +93,7 @@ public class GameLoop {
 
       if (!expression.isEmpty()) {
          if (expression.get(0).getStartedAt() + 1000 <= clipTimeMs) {
-         expression.remove(0);
+            expression.remove(0);
          }
       }
 
@@ -101,8 +102,8 @@ public class GameLoop {
          judge.checkNote(activeNote, key);
 
          if (activeNote.isMissed()) {
-            expression.add(new ExpressionIndicator("missed", clipTimeMs, activeNote.getX(), activeNote.getY()));
             note.remove(0);
+            expression.add(new ExpressionIndicator("missed", clipTimeMs, activeNote.getX(), activeNote.getY()));
          }
 
          if (activeNote.isClickble()) {
