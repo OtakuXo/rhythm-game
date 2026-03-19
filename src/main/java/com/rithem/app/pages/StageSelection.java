@@ -25,7 +25,6 @@ public class StageSelection extends JPanel implements ActionListener {
    private Frame frame;
    public Dimension size = new Dimension(1000, 1000);
 
-   public JButton start = new JButton("start");
    public JButton back = new JButton("back");
 
    private List<JButton> buttonList = new ArrayList<>();
@@ -49,7 +48,7 @@ public class StageSelection extends JPanel implements ActionListener {
 
       back.addActionListener(new ActionListener() {
          public void actionPerformed(ActionEvent e) {
-            frame.setActivePanel("Home");
+            frame.setActivePanel("home");
             frame.swapPanel();
          }
       });
@@ -62,7 +61,6 @@ public class StageSelection extends JPanel implements ActionListener {
          buttonList.add(button);
          this.add(button, gbc);
       }
-      this.add(start, gbc);
       this.add(back, gbc);
    }
 

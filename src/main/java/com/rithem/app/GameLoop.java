@@ -115,13 +115,14 @@ public class GameLoop {
    }
 
    public void resetGame(ActionEvent e, Frame frame) {
+      frame.setScore(String.valueOf(score));
       note.clear();
       clipTimeMs = 0;
       trackPosition = 0;
       score = 0;
       nextNoteSpawnTime = music.firstNoteSpawnTime;
       musicPlayer.getClip().setMicrosecondPosition(0);
-      frame.setActivePanel("home");
+      frame.setActivePanel("result");
       frame.swapPanel();
    }
 

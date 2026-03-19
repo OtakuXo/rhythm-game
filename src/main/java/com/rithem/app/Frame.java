@@ -1,18 +1,26 @@
 package com.rithem.app;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.*;
 
 import com.rithem.app.musics.Music;
 import com.rithem.app.pages.Game;
 import com.rithem.app.pages.Home;
+import com.rithem.app.pages.Result;
 import com.rithem.app.pages.StageSelection;
 
 public class Frame extends JFrame {
-   private Home home = new Home(this);
+   // private Home home = new Home(this);
    private Music music;
-   private Game game;
-   private StageSelection stage;
+   // private Game game;
+   // private Result result;
+   // private StageSelection stage;
+   private String score;
    private String activePanel = "home";
+
+   private List<JPanel> panels = new ArrayList<>();
 
    public Frame() {
       this.swapPanel();
@@ -26,29 +34,30 @@ public class Frame extends JFrame {
    public void swapPanel() {
       switch (activePanel) {
          case "game":
-            game = new Game(this, music);
-            this.remove(stage);
-            this.add(game);
-            game.requestFocusInWindow();
-            revalidate();
-            repaint();
-            game.startGame();
+            swap(new Game(this, music));
             break;
          case "stage":
-            stage = new StageSelection(this);
-            this.remove(home);
-            this.add(stage);
-            revalidate();
-            repaint();
+            swap(new StageSelection(this));
             break;
          case "home":
-            // game.musicPlayer.getClip().stop();
-            // this.remove(stage);
-            this.add(home);
-            revalidate();
-            repaint();
+            swap(new Home(this));
+            break;
+         case "result":
+            swap(new Result(this));
             break;
       }
+   }
+
+   public void swap(JPanel panel) {
+      if (!panels.isEmpty()) {
+         this.remove(panels.get(0));
+      }
+      panels.clear();
+      panels.add(panel);
+      this.add(panels.get(0));
+      panels.get(0).requestFocusInWindow();
+      revalidate();
+      repaint();
    }
 
    public void setActivePanel(String activePanel) {
@@ -59,7 +68,15 @@ public class Frame extends JFrame {
       return activePanel;
    }
 
-   public void setMusic(Music music){
+   public void setMusic(Music music) {
       this.music = music;
+   }
+
+   public String getScore() {
+      return score;
+   }
+
+   public void setScore(String score) {
+      this.score = score;
    }
 }

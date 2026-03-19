@@ -28,12 +28,14 @@ public class Game extends JPanel {
    public long clipTime;
    public Frame parentFrame;
    public MusicPlayer clickSound = new MusicPlayer();
+   
 
    public Game(Frame frame, Music music) {
       this.music = music;
       this.gameLoop = new GameLoop(playground, musicPlayer, music);
       this.parentFrame = frame;
       clickSound.playMusic("audio/click3.wav");
+      this.requestFocusInWindow();
 
       this.addKeyListener(new KeyAdapter() {
          @Override
@@ -63,6 +65,7 @@ public class Game extends JPanel {
       this.add(scoreBoard);
       this.add(playground);
       this.setFocusable(true);
+      this.startGame();
 
    }
 
@@ -75,6 +78,7 @@ public class Game extends JPanel {
 
    public void stopGame() {
       this.musicPlayer.getClip().stop();
+      this.parentFrame.setScore(this.scoreBoard.getText());
    }
 
    // not implemented
