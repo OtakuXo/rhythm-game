@@ -68,7 +68,6 @@ public class Game extends JPanel {
       this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
       this.setBackground(Color.black);
       this.add(scoreBoard);
-      this.add(health);
       this.add(playground);
       this.setFocusable(true);
       this.startGame();
@@ -78,7 +77,7 @@ public class Game extends JPanel {
    public void startGame() {
       // music.checkTrack();
       gameLoop.gameState = State.running;
-      gameLoop.loop(scoreBoard, health, this.parentFrame);
+      gameLoop.loop(scoreBoard, this.parentFrame);
       musicPlayer.getClip().start();
    }
 

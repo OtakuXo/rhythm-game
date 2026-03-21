@@ -1,6 +1,10 @@
 package com.rithem.app.pages;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -24,13 +28,22 @@ public class Result extends JPanel {
       this.frame = frame;
       this.setBackground(Color.BLACK);
       this.setFocusable(true);
+      this.setLayout(new GridBagLayout());
 
-      this.score.setText(this.frame.getScore());
+      GridBagConstraints gbc = new GridBagConstraints();
 
-      this.add(score);
-      this.add(home);
-      this.add(stage);
-      this.add(replay);
+      gbc.gridx = 0;
+      gbc.insets = new Insets(5, 5, 5, 5);
+      
+
+      this.score.setText("your score = " + this.frame.getScore());
+      this.score.setForeground(Color.green);
+      this.score.setFont(new Font("Serif", Font.PLAIN, 20));
+
+      this.add(score, gbc);
+      this.add(home, gbc);
+      this.add(stage, gbc);
+      this.add(replay, gbc);
 
       stage.addActionListener(new ActionListener() {
          public void actionPerformed(ActionEvent e){

@@ -23,6 +23,7 @@ public class GameLoop {
    private int trackPosition = 0;
    private long clipTimeMs = 0;
    private int score = 0;
+   private int health = 50;
    private int speed = 7;
    public State gameState = State.stoped;
 
@@ -34,7 +35,6 @@ public class GameLoop {
    private int key;
 
    public GameLoop(PlayGround playGround, MusicPlayer musicPlayer, Music music) {
-
       this.playGround = playGround;
       this.judge = new Judge(playGround.clickbleRowStart, playGround.clickbleRowEnd);
       this.nextNoteSpawnTime = music.firstNoteSpawnTime;
@@ -45,14 +45,14 @@ public class GameLoop {
       // musicPlayer.getClip().start();
    }
 
-   public void loop(JLabel scoreBoard, Frame frame) {
+   public void loop(JLabel scoreBoard, JLabel health, Frame frame) {
       int delay = 16;
 
       Timer timer = new Timer(delay, new ActionListener() {
          @Override
          public void actionPerformed(ActionEvent e) {
 
-            if (musicPlayer.getClip().getFrameLength() == musicPlayer.getClip().getFramePosition()) {
+            if (musicPlayer.getClip().getFrameLength() == musicPlayer.getClip().getFramePosition() || GameLoop.this.health <= 0 ) {
                resetGame(e, frame);
             }
 
@@ -63,7 +63,7 @@ public class GameLoop {
                return;
             }
 
-            update(scoreBoard);
+            update(scoreBoard, health);
             playGround.repaint();
 
          }
@@ -71,9 +71,10 @@ public class GameLoop {
       timer.start();
    }
 
-   public void update(JLabel scoreBoard) {
+   public void update(JLabel scoreBoard, JLabel health) {
 
       scoreBoard.setText("score: " + this.score);
+      health.setText("health: " + this.health);
       // adds note
       clipTimeMs = musicPlayer.getClip().getMicrosecondPosition() / 1000;
       if (clipTimeMs > nextNoteSpawnTime && music.track.length != trackPosition) {
@@ -102,6 +103,7 @@ public class GameLoop {
          judge.checkNote(activeNote, key);
 
          if (activeNote.isMissed()) {
+            this.health = this.health - 5;
             note.remove(0);
             expression.add(new ExpressionIndicator("missed", clipTimeMs, activeNote.getX(), activeNote.getY()));
          }
@@ -120,10 +122,12 @@ public class GameLoop {
       clipTimeMs = 0;
       trackPosition = 0;
       score = 0;
+      health = 50;
       nextNoteSpawnTime = music.firstNoteSpawnTime;
       musicPlayer.getClip().setMicrosecondPosition(0);
       frame.setActivePanel("result");
       frame.swapPanel();
+      this.gameState = State.paused;
    }
 
    public void noteClicked() {
@@ -134,6 +138,9 @@ public class GameLoop {
          expression.add(new ExpressionIndicator("mah", clipTimeMs, activeNote.getX(), activeNote.getY()));
          return;
       } else {
+         if (this.health < 100) {
+            this.health = this.health + 1;
+         }
          expression.add(new ExpressionIndicator("cool", clipTimeMs, activeNote.getX(), activeNote.getY()));
          return;
       }

@@ -32,28 +32,38 @@ public class Frame extends JFrame {
    }
 
    public void swapPanel() {
+      System.out.println(panels.size());
       switch (activePanel) {
          case "game":
-            swap(new Game(this, music));
+            panels.add(new Game(this, music));
+            swap();
             break;
          case "stage":
-            swap(new StageSelection(this));
+            panels.add(new StageSelection(this));
+            swap();
             break;
          case "home":
-            swap(new Home(this));
+            panels.add(new Home(this));
+            swap();
+            // swap(new Home(this));
             break;
          case "result":
-            swap(new Result(this));
+            panels.add(new Result(this));
+            swap();
+            // swap(new Result(this));
             break;
       }
    }
 
-   public void swap(JPanel panel) {
-      if (!panels.isEmpty()) {
+   public void swap() {
+      // if statement is to prevent crash at start
+      // i am unsure if the instances of jpanels are being removed properly
+      System.out.println(panels.size());
+      if (panels.size() >= 2) {
          this.remove(panels.get(0));
+         panels.remove(0);
       }
-      panels.clear();
-      panels.add(panel);
+
       this.add(panels.get(0));
       panels.get(0).requestFocusInWindow();
       revalidate();
