@@ -5,6 +5,6 @@ package com.rithem.app;
  */
 public class App {
    public static void main(String[] args) {
-            new Frame();
-      };
+      new Frame();
+   };
 }

@@ -9,14 +9,6 @@ public class MusicPlayer {
 
    private Clip clip;
 
-   public Clip getClip() {
-	return clip;
-}
-
-   public void setClip(Clip clip) {
-	this.clip = clip;
-   }
-
    public void playMusic(String music) {
       try {
          InputStream audioFile =  MusicPlayer.class.getClassLoader().getResourceAsStream(music);
@@ -32,5 +24,13 @@ public class MusicPlayer {
          System.out.println(e);
       }
 
+   }
+
+   public Clip getClip() {
+	return clip;
+}
+
+   public void setClip(Clip clip) {
+	this.clip = clip;
    }
 }

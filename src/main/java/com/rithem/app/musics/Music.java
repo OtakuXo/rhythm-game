@@ -6,6 +6,7 @@ public class Music {
    public NotePosition track[];
    public String name;
    public String musicPath;
+   public long duration; // i cant get duration of mp3 files i am stupid
 
    private int tmp;
 
@@ -30,8 +31,3 @@ public class Music {
    }
 }
 
-// class Songs {
-// public Song monogatariOp4 = new Song(91508004 / 1000, 2900,
-// monogatariOp4Notes);
-// }
-// monogatri openinig 4

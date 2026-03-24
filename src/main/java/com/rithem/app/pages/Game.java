@@ -6,10 +6,11 @@ import javax.swing.JPanel;
 
 import com.rithem.app.Frame;
 import com.rithem.app.GameLoop;
-import com.rithem.app.MusicPlayer;
+// import com.rithem.app.MusicPlayer;
 import com.rithem.app.PlayGround;
 import com.rithem.app.GameLoop.State;
 import com.rithem.app.musics.Music;
+import com.rithem.app.utils.MusicPlayer;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -21,20 +22,18 @@ public class Game extends JPanel {
    private PlayGround playground = new PlayGround();
    private JLabel health = new JLabel();
 
-
    // i need to make them private in future
    public JLabel scoreBoard = new JLabel();
-   public MusicPlayer musicPlayer = new MusicPlayer();
+   public MusicPlayer musicPlayer = new MusicPlayer();;
    public GameLoop gameLoop;
-   public long clipTime;
+   // public long clipTime;
    public Frame parentFrame;
    public MusicPlayer clickSound = new MusicPlayer();
-   
 
    public Game(Frame frame, Music music) {
       this.gameLoop = new GameLoop(playground, musicPlayer, music);
       this.parentFrame = frame;
-      clickSound.playMusic("audio/click3.wav");
+      // clickSound.playMusic("audio/click3.wav");
       this.requestFocusInWindow();
 
       this.addKeyListener(new KeyAdapter() {
@@ -45,9 +44,9 @@ public class Game extends JPanel {
             }
             gameLoop.setKey(e.getKeyCode());
 
-            clickSound.getClip().stop();
-            clickSound.getClip().setFramePosition(0);
-            clickSound.getClip().start();
+            // clickSound.getClip().stop();
+            // clickSound.getClip().setFramePosition(0);
+            // clickSound.getClip().start();
          }
 
          public void keyReleased(KeyEvent e) {
@@ -79,24 +78,23 @@ public class Game extends JPanel {
       // music.checkTrack();
       gameLoop.gameState = State.running;
       gameLoop.loop(scoreBoard, health, this.parentFrame);
-      musicPlayer.getClip().start();
+      // musicPlayer.getClip().start();
    }
 
    public void stopGame() {
-      this.musicPlayer.getClip().stop();
+      // this.musicPlayer.getClip().stop();
       this.parentFrame.setScore(this.scoreBoard.getText());
    }
 
    // not implemented
    public void pauseGame() {
-      this.clipTime = this.musicPlayer.getClip().getMicrosecondPosition() / 1000;
-      this.musicPlayer.getClip().stop();
+      // this.musicPlayer.getClip().stop();
    }
 
    // not implemented
    public void unpauseGame() {
-      this.musicPlayer.getClip().start();
-      this.musicPlayer.getClip().setMicrosecondPosition(this.clipTime);
+      // this.musicPlayer.getClip().start();
+      // this.musicPlayer.getClip().setMicrosecondPosition(this.clipTime);
    }
 
    public GameLoop getGameLoop() {
@@ -108,10 +106,10 @@ public class Game extends JPanel {
    }
 
    public JLabel getHealth() {
-	return health;
-}
+      return health;
+   }
 
    public void setHealth(JLabel health) {
-	this.health = health;
+      this.health = health;
    }
 }

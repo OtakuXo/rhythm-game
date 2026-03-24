@@ -1,5 +1,6 @@
 package com.rithem.app;
 
+import java.nio.channels.Pipe.SourceChannel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,12 +23,17 @@ public class Frame extends JFrame {
 
    private List<JPanel> panels = new ArrayList<>();
 
+   // private PlayMusic tmp = new PlayMusic();
+
    public Frame() {
       this.swapPanel();
-      this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       this.pack();
       this.setLocationRelativeTo(null);
       this.setVisible(true);
+
+      this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+      // System.out.println(tmp.player.getMusicPlayer().getPosition());
 
    }
 
