@@ -101,5 +101,5 @@ public class LukaLuka {
          new NotePosition(3, 500), new NotePosition(3, 500), new NotePosition(3, 500), new NotePosition(3,500),
          new NotePosition(0, 500) };
 
-   public Music music = new Music("LukaLuka", "audio/luka-luka.wav", 91508004 / 1000, 2900, track);
+   public Music music = new Music("LukaLuka", "audio/luka-luka.mp3", 12500, 2900, track);
 }

@@ -46,14 +46,8 @@ public class GameLoop {
       this.music = music;
       this.musicPlayer = musicPlayer;
       this.gameState = State.running;
-      // musicPlayer.playMusic(music.musicPath);
-      // musicPlayer.getClip().start();
 
       musicPlayerThread = new Thread(() -> {
-         // if (this.gameState == State.stoped) {
-         //   Thread.currentThread().interrupt(); 
-         // }
-
          try {
             musicPlayer.getMusicPlayer().play();
          } catch (Exception e) {
@@ -72,15 +66,13 @@ public class GameLoop {
       this.timer = new Timer(delay, new ActionListener() {
          @Override
          public void actionPerformed(ActionEvent e) {
-
-            if (GameLoop.this.health <= 0) {
+            System.out.println(musicPlayer.getMusicPlayer().getPosition() + " pos");
+            System.out.println( GameLoop.this.music.musicLength + " len");
+            
+            // player.isCompleted is reduceliously slow
+            if (GameLoop.this.health <= 0 || GameLoop.this.music.musicLength <= musicPlayer.getMusicPlayer().getPosition()) {
                resetGame(e, frame);
             }
-
-            // if (musicPlayer.getClip().getFrameLength() ==
-            // musicPlayer.getClip().getFramePosition() || GameLoop.this.health <= 0 ) {
-            // resetGame(e, frame);
-            // }
 
             // this does not do any thing
             if (gameState == State.stoped || gameState == State.paused) {
@@ -105,14 +97,12 @@ public class GameLoop {
 
       scoreBoard.setText("score: " + this.score);
       health.setText("health: " + this.health);
-      // adds note
-      // clipTimeMs = musicPlayer.getClip().getMicrosecondPosition() / 1000;
 
+      // adds note
       clipTimeMs = musicPlayer.getMusicPlayer().getPosition();
       if (clipTimeMs > nextNoteSpawnTime && music.track.length != trackPosition) {
          note.add(new Note(music.track[trackPosition].position, 0));
          nextNoteSpawnTime = clipTimeMs + music.track[trackPosition].beatLengthMs;
-
          trackPosition++;
       }
 

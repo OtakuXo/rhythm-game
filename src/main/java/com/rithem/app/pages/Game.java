@@ -24,13 +24,17 @@ public class Game extends JPanel {
 
    // i need to make them private in future
    public JLabel scoreBoard = new JLabel();
-   public MusicPlayer musicPlayer = new MusicPlayer();;
+   public MusicPlayer musicPlayer;
    public GameLoop gameLoop;
    // public long clipTime;
    public Frame parentFrame;
-   public MusicPlayer clickSound = new MusicPlayer();
+   // public MusicPlayer clickSound = new MusicPlayer();
 
    public Game(Frame frame, Music music) {
+
+      this.musicPlayer = new MusicPlayer(music.musicPath);
+
+
       this.gameLoop = new GameLoop(playground, musicPlayer, music);
       this.parentFrame = frame;
       // clickSound.playMusic("audio/click3.wav");

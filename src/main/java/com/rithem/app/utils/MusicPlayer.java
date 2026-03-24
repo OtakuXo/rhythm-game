@@ -6,9 +6,9 @@ import javazoom.jl.player.Player;
 public class MusicPlayer {
    private Player musicPlayer;
 
-   public MusicPlayer() {
+   public MusicPlayer(String music) {
          try {
-            InputStream inputStream = MusicPlayer.class.getClassLoader().getResourceAsStream("audio/mono.mp3");
+            InputStream inputStream = MusicPlayer.class.getClassLoader().getResourceAsStream(music);
             Player player = new Player(inputStream);
             musicPlayer = player;
          } catch (Exception e) {

@@ -1,12 +1,11 @@
 package com.rithem.app.musics;
 
 public class Music {
-   public long musicLength;
+   public long musicLength;// i cant get duration of mp3 files i am stupid
    public int firstNoteSpawnTime;
    public NotePosition track[];
    public String name;
    public String musicPath;
-   public long duration; // i cant get duration of mp3 files i am stupid
 
    private int tmp;
 
